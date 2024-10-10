@@ -2,11 +2,9 @@
 This script makes it possible to automate the process of creating highlights by giving as input the movies, the corresponding minutes of highlights and banner ads. It will make sure to cut these actions and merge them into a single movie by scrolling up the advertising partners.
 
 ## Input
-* In a folder named `Minuti` place all the **text files with the minutes** inside that have the salient actions. it is important to make sure that these files are sorted alphabetically so that they correspond to the correct movie. The program will search for files of type `.txt`, any type of other file will be ignored.
-* In the `Filmati` folder place the **movies files** that will be divided into clips by the minutes chosen previously. it is important to make sure that these files are sorted alphabetically so that they correspond to the correct text files for the minutes. The program will search for files of type `.mp4`, any type of other file will be ignored.
-* In the `Banner` folder place the **banner ads**, the recommended dimension is 300(width)x100(height). Also, if you want to prioritize some ads over others, you can sort them alphabetically. 
-
-![alt text](https://github.com/isBre/Highlights-Automation/blob/main/Images/Screenshot%201.png)
+* In a folder named `Minutes` place all the **text files with the minutes** inside that have the salient actions. it is important to make sure that these files are sorted alphabetically so that they correspond to the correct movie. The program will search for files of type `.txt`, any type of other file will be ignored.
+* In the `Movies` folder place the **movies files** that will be divided into clips by the minutes chosen previously. it is important to make sure that these files are sorted alphabetically so that they correspond to the correct text files for the minutes. The program will search for files of type `.mp4`, any type of other file will be ignored.
+* In the `Ads` folder place the **banner ads**, the recommended dimension is 300(width)x100(height). Also, if you want to prioritize some ads over others, you can sort them alphabetically. 
 
 ## Output
 * A number of `clips` equal to the number of minutes entered in all text files in Minutes.

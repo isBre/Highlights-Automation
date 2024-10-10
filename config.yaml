@@ -1,0 +1,9 @@
+videos_path: './movies/'
+minutes_path: './minutes/'
+output_path: './output/'
+banner_path: './ads/'
+clips_path: './'
+
+banner_time: 3
+seconds_before: 5
+seconds_after: 2
