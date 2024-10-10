@@ -1,53 +1,50 @@
 import os
+import yaml
+from typing import List
 from moviepy.editor import VideoFileClip, concatenate_videoclips, ImageClip
-from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
+from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip 
+from utils import read_files, load_clips
 
-VIDEOS_PATH = './Filmati/'
-MINUTES_PATH = './Minuti/'
-OUTPUT_PATH  = "./Output/"
-BANNER_PATH = "./Banner/"
-CLIPS_PATH = "./"
+def main():
+    # Load YAML configuration file
+    with open('config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
 
-BANNER_TIME = 3
-SECONDS_BEFORE = 5
-SECONDS_AFTER = 2
+    # Read video clips from the clips path defined in the config
+    clips = load_clips(read_files("mp4", config['clips_path']), config['clips_path'])
 
-#I need this function to pick up every file with a particular extension
-#in the folder that i give as input
-def read_file(extension, path):
-    quarters = []
-    for file in os.listdir(path):
-        if file.lower().endswith(extension):
-            quarters.append(file)
-    print(f"[Console] Trovati {len(quarters)} file che finiscono con {extension}")
-    return quarters
+    # Concatenate all the video clips
+    concatenated_clips = concatenate_videoclips(clips)
 
-def read_clips(clips_name, clips_path):
-    clips = []
-    for i in range(0, len(clips_name)):
-        video = VideoFileClip(clips_path + clips_name[i])
-        clips.append(video)
-    return clips
+    # Load banner images (PNG files) from banner path
+    banner_files = read_files('png', config['banner_path'])
+    banner_clips = [concatenated_clips]
 
-#Clips Concatenations
-clips = read_clips(read_file("mp4", CLIPS_PATH), CLIPS_PATH)
-conc_clips = concatenate_videoclips(clips)
+    # Add banners at specified intervals
+    for i in range(config['banner_time'], int(concatenated_clips.duration - config['banner_time']), config['banner_time']):
+        banner_image = ImageClip(os.path.join(config['banner_path'], banner_files[i % len(banner_files)]))
+        banner_clip = (
+            banner_image.set_start(i)
+            .set_duration(config['banner_time'])
+            .resize(height=80)
+            .margin(top=15, opacity=0)
+            .set_pos(("center", "top"))
+        )
+        banner_clips.append(banner_clip)
 
-#Banner Composition
-banner_path = read_file('png', BANNER_PATH)
-banners_videos = [conc_clips]
+    # Create the final video with banners overlaid
+    final_video = CompositeVideoClip(banner_clips)
 
-for i in range(BANNER_TIME, int(conc_clips.duration-BANNER_TIME), BANNER_TIME):
-    banners_videos.append((ImageClip(BANNER_PATH + banner_path[int(((i-BANNER_TIME)/BANNER_TIME)%len(banner_path))])
-        .set_start(i)
-        .set_duration(BANNER_TIME)
-        .resize(height=80)
-        .margin(top=15, opacity=0)
-        .set_pos(("center","top"))))
+    # Output the final video file
+    output_path = os.path.join(config['output_path'], "Highlights.mp4")
+    final_video.write_videofile(output_path)
 
-#Final composition and output
-final_sponsor = CompositeVideoClip(banners_videos)
-final_sponsor.write_videofile("Highlights.mp4")
+    # Ensure all clips are properly closed to release resources
+    for clip in clips:
+        try:
+            clip.close()
+        except Exception as e:
+            print(f"Error closing clip: {e}")
 
-for i in range (0, len(clips)):
-    clips[i].close()
+if __name__ == "__main__":
+    main()
