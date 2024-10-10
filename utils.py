@@ -36,16 +36,31 @@ def load_config(file_path: str) -> dict:
 # Time utilities
 def string_to_seconds(time_str: str) -> int:
     """
-    Convert a time string (HH:MM:SS) into seconds.
+    Convert a time string (HH:MM:SS, MM:SS, or SS) into seconds.
     
     Args:
-        time_str (str): Time as a string in the format 'HH:MM:SS'.
+        time_str (str): Time as a string in one of the formats:
+                        'HH:MM:SS', 'MM:SS', or 'SS'.
     
     Returns:
         int: Time in seconds.
     """
-    h, m, s = map(int, time_str.split(':'))
-    return h * 3600 + m * 60 + s
+    time_parts = list(map(int, time_str.split(':')))
+
+    # Handle different time formats based on the number of parts
+    if len(time_parts) == 3:  # HH:MM:SS
+        hours, minutes, seconds = time_parts
+    elif len(time_parts) == 2:  # MM:SS
+        hours = 0
+        minutes, seconds = time_parts
+    elif len(time_parts) == 1:  # SS
+        hours = 0
+        minutes = 0
+        seconds = time_parts[0]
+    else:
+        raise ValueError(f"Invalid time format: {time_str}")
+
+    return hours * 3600 + minutes * 60 + seconds
 
 
 # Video processing utilities
