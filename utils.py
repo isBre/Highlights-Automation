@@ -1,3 +1,8 @@
+import os
+from typing import List
+from moviepy.editor import VideoFileClip
+
+
 def read_files(extension: str, path: str) -> List[str]:
     """
     Retrieve all files with a specific extension from the provided directory.
