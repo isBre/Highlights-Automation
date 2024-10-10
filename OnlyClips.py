@@ -14,7 +14,6 @@ def main():
     # Read video, minutes, and banner paths
     videos_path = read_files('mp4', config['videos_path'])
     minutes_path = read_files('txt', config['minutes_path'])
-    banner_path = read_files('png', config['banner_path'])
 
     # Check if the number of videos and minutes files match
     if len(videos_path) != len(minutes_path):
@@ -34,6 +33,9 @@ def main():
 
         for j, start_time in enumerate(all_seconds):
             clip_name = f"clip-{str(len(final_clips_name)).zfill(2)}.mp4"
+            print(clip_name)
+            print(f"Video dimensions: {video.size}")  # This should print the width and height of the video
+
             video.subclip(max(0, start_time - config['seconds_before']),
                           start_time + config['seconds_after']).write_videofile(
                           os.path.join(config['output_path'], clip_name), audio_codec='aac')
