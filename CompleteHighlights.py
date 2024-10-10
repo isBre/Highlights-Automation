@@ -2,10 +2,10 @@ import os
 from moviepy.editor import VideoFileClip, concatenate_videoclips, ImageClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 
-VIDEOS_PATH = './Filmati/'
-MINUTES_PATH = './Minuti/'
+VIDEOS_PATH = './Movies/'
+MINUTES_PATH = './Minutes/'
 OUTPUT_PATH  = "./Output/"
-BANNER_PATH = "./Banner/"
+BANNER_PATH = "./Ads/"
 CLIPS_PATH = "./"
 
 BANNER_TIME = 3
